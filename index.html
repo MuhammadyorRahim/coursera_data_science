@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tail Index Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tail Index Calculator</h1>
+            <p class="subtitle">Advanced Statistical Analysis Tool</p>
+        </header>
+
+        <!-- Step 1: File Upload -->
+        <section id="upload-section" class="card active">
+            <div class="step-indicator">Step 1</div>
+            <h2>Upload Your Data</h2>
+            <div class="upload-area" id="upload-area">
+                <div class="upload-icon">📁</div>
+                <p class="upload-text">Click to select a file or drag and drop</p>
+                <p class="upload-hint">Supported formats: CSV, Excel (XLSX)</p>
+                <input type="file" id="file-input" accept=".csv,.xlsx" hidden>
+            </div>
+            <div id="file-info" class="file-info hidden">
+                <span id="file-name"></span>
+                <button id="remove-file" class="btn-secondary">Remove</button>
+            </div>
+            <button id="continue-to-config" class="btn-primary hidden">Continue to Configuration</button>
+        </section>
+
+        <!-- Step 2: Configuration -->
+        <section id="config-section" class="card hidden">
+            <div class="step-indicator">Step 2</div>
+            <h2>Configure Analysis</h2>
+
+            <div class="config-group">
+                <h3>Select Columns</h3>
+                <p class="hint">Choose the columns you want to analyze</p>
+                <div id="column-selection" class="column-grid"></div>
+            </div>
+
+            <div class="config-group">
+                <h3>Analysis Methods</h3>
+                <div class="method-selection">
+                    <label class="checkbox-card">
+                        <input type="checkbox" id="method-hill" checked>
+                        <div class="method-info">
+                            <strong>Hill's Estimator</strong>
+                            <p>Standard tail index estimation method</p>
+                        </div>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" id="method-rs" checked>
+                        <div class="method-info">
+                            <strong>OLS Rank-Size Regression</strong>
+                            <p>Log-log regression method (recommended)</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="config-group">
+                <h3>Analysis Options</h3>
+                <label class="checkbox-card">
+                    <input type="checkbox" id="option-rolling" checked>
+                    <div class="method-info">
+                        <strong>Rolling Window Analysis</strong>
+                        <p>Calculate tail index with expanding window (100+ observations)</p>
+                    </div>
+                </label>
+                <label class="checkbox-card">
+                    <input type="checkbox" id="option-separation" checked>
+                    <div class="method-info">
+                        <strong>Positive/Negative Separation</strong>
+                        <p>Analyze positive and negative returns separately with truncation levels</p>
+                    </div>
+                </label>
+                <label class="checkbox-card">
+                    <input type="checkbox" id="option-graphics" checked>
+                    <div class="method-info">
+                        <strong>Generate Graphics</strong>
+                        <p>Create interactive charts for visualization</p>
+                    </div>
+                </label>
+            </div>
+
+            <div class="button-group">
+                <button id="back-to-upload" class="btn-secondary">Back</button>
+                <button id="start-calculation" class="btn-primary">Start Calculation</button>
+            </div>
+        </section>
+
+        <!-- Step 3: Processing -->
+        <section id="processing-section" class="card hidden">
+            <div class="step-indicator">Step 3</div>
+            <h2>Processing</h2>
+            <div class="loader"></div>
+            <p id="processing-status" class="processing-status">Calculating tail indexes...</p>
+        </section>
+
+        <!-- Step 4: Results -->
+        <section id="results-section" class="card hidden">
+            <div class="step-indicator">Step 4</div>
+            <h2>Results</h2>
+
+            <div class="results-tabs">
+                <button class="tab-btn active" data-tab="summary">Summary</button>
+                <button class="tab-btn" data-tab="rolling">Rolling Analysis</button>
+                <button class="tab-btn" data-tab="separation">Pos/Neg Analysis</button>
+                <button class="tab-btn" data-tab="charts">Charts</button>
+            </div>
+
+            <div class="tab-content active" id="summary-tab">
+                <h3>Summary Statistics</h3>
+                <div id="summary-results"></div>
+            </div>
+
+            <div class="tab-content" id="rolling-tab">
+                <h3>Rolling Window Analysis</h3>
+                <div id="rolling-results"></div>
+            </div>
+
+            <div class="tab-content" id="separation-tab">
+                <h3>Positive/Negative Separation Analysis</h3>
+                <div id="separation-results"></div>
+            </div>
+
+            <div class="tab-content" id="charts-tab">
+                <h3>Interactive Charts</h3>
+                <div id="charts-container"></div>
+            </div>
+
+            <div class="button-group">
+                <button id="download-results" class="btn-primary">Download Results (CSV)</button>
+                <button id="download-charts" class="btn-primary">Download Charts (PNG)</button>
+                <button id="new-analysis" class="btn-secondary">New Analysis</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="calculations.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
